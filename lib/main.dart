@@ -67,15 +67,21 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   Future<void> testeJson() async {
-    final configFile = File('data/flutter_assets/lib/assets/config.json');
+    //final configFile = File('data/flutter_assets/lib/assets/config.json');
+    final configFile = File('lib/assets/config.json');
     final jsonString = await configFile.readAsString();
     final dynamic jsonMap = jsonDecode(jsonString);
 
     if(jsonMap['teste'] == true){
       setState(() {
-        test = 'MUNDIAL';
-        saveDocument();
+        //test = 'MUNDIAL';
+        test = jsonMap['ultimo_teste'];
+        //saveDocument();
       }); 
+    }else{
+      setState(() {
+        test = 'O NECESSARIO PARA UM MUNDIAL';
+      });
     }
   }
 
