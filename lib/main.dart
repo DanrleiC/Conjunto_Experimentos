@@ -59,19 +59,18 @@ class _MyHomePageState extends State<MyHomePage> {
         ),
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: testeJson,
+        onPressed: getUrl,
         tooltip: 'Increment',
         child: const Icon(Icons.add),
       ),
     );
   }
 
-  Future<void> testeJson() async {
+  Future<String> testeJson() async {
     //final configFile = File('data/flutter_assets/lib/assets/config.json');
     final configFile = File('lib/assets/config.json');
     final jsonString = await configFile.readAsString();
     final dynamic jsonMap = jsonDecode(jsonString);
-
     if(jsonMap['teste'] == true){
       setState(() {
         //test = 'MUNDIAL';
@@ -83,13 +82,20 @@ class _MyHomePageState extends State<MyHomePage> {
         test = 'O NECESSARIO PARA UM MUNDIAL';
       });
     }
+    return jsonMap['teste_string'];
   }
 
   void saveDocument() async{
-    
     dynamic unit = base64.decode(Pdf().pdf);
     int rand = Random().nextInt(999);
     final file = File('temp/example$rand.pdf');
     await file.writeAsBytes(unit.buffer.asUint8List());    
   }
+
+  String getUrl(){
+    testeJson().then((value) => setState((){
+      test = value;
+    }));
+    return test;
+  } 
 }
