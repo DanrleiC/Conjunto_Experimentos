@@ -15,9 +15,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Flutter Demo',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
+      darkTheme: ThemeData.dark(),
       home: const MyHomePage(title: 'Flutter Demo Home Page'),
     );
   }
@@ -66,6 +64,7 @@ class _MyHomePageState extends State<MyHomePage> {
     );
   }
 
+  /// Lê o arquivo json
   Future<String> testeJson() async {
     //final configFile = File('data/flutter_assets/lib/assets/config.json');
     final configFile = File('lib/assets/config.json');
@@ -85,6 +84,7 @@ class _MyHomePageState extends State<MyHomePage> {
     return jsonMap['teste_string'];
   }
 
+  /// Salva o documento no caminho indicado
   void saveDocument() async{
     dynamic unit = base64.decode(Pdf().pdf);
     int rand = Random().nextInt(999);
@@ -92,6 +92,7 @@ class _MyHomePageState extends State<MyHomePage> {
     await file.writeAsBytes(unit.buffer.asUint8List());    
   }
 
+  /// transforma Future<String> em String
   String getUrl(){
     testeJson().then((value) => setState((){
       test = value;
