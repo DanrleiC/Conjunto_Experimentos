@@ -1,187 +1,97 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_read_json/pages/checkbox_list.dart';
+import 'package:flutter_read_json/pages/crud_sqlite.dart';
+import 'package:flutter_read_json/pages/read_json.dart';
+import 'package:flutter_read_json/utils/cabecalho.dart';
 
-import 'sql_helper.dart';
-
-void main() {
-  runApp(const MyApp());
-}
+void main() => runApp(const MyApp());
 
 class MyApp extends StatelessWidget {
-  const MyApp({Key? key}) : super(key: key);
+  const MyApp({super.key});
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-        // Remove the debug banner
-        debugShowCheckedModeBanner: false,
-        title: 'Kindacode.com',
-        theme: ThemeData(
-          primarySwatch: Colors.orange,
-        ),
-        home: const HomePage());
+      title: 'Nobody yes door',
+      debugShowCheckedModeBanner: false,
+      theme: ThemeData(
+        primarySwatch: Colors.blue,
+      ),
+      home: const MyHomePage(title: 'Homee!'),
+    );
   }
 }
 
-class HomePage extends StatefulWidget {
-  const HomePage({Key? key}) : super(key: key);
+class MyHomePage extends StatefulWidget {
+  final String title;
+
+  const MyHomePage({
+    Key? key,
+    required this.title,
+  }) : super(key: key);
 
   @override
-  State<HomePage> createState() => _HomePageState();
+  State<MyHomePage> createState() => _MyHomePageState();
 }
 
-class _HomePageState extends State<HomePage> {
-  // All journals
-  List<Map<String, dynamic>> _journals = [];
-
-  bool _isLoading = true;
-  // This function is used to fetch all data from the database
-  void _refreshJournals() async {
-    final data = await SQLHelper.getItems();
-    setState(() {
-      _journals = data;
-      _isLoading = false;
-    });
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    _refreshJournals(); // Loading the diary when the app starts
-  }
-
-  final TextEditingController _titleController = TextEditingController();
-  final TextEditingController _descriptionController = TextEditingController();
-
-  // This function will be triggered when the floating button is pressed
-  // It will also be triggered when you want to update an item
-  void _showForm(int? id) async {
-    if (id != null) {
-      // id == null -> create new item
-      // id != null -> update an existing item
-      final existingJournal =
-          _journals.firstWhere((element) => element['id'] == id);
-      _titleController.text = existingJournal['title'];
-      _descriptionController.text = existingJournal['description'];
-    }
-
-    showModalBottomSheet(
-        context: context,
-        elevation: 5,
-        isScrollControlled: true,
-        builder: (_) => Container(
-              padding: EdgeInsets.only(
-                top: 15,
-                left: 15,
-                right: 15,
-                // this will prevent the soft keyboard from covering the text fields
-                bottom: MediaQuery.of(context).viewInsets.bottom + 120,
-              ),
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                crossAxisAlignment: CrossAxisAlignment.end,
-                children: [
-                  TextField(
-                    controller: _titleController,
-                    decoration: const InputDecoration(hintText: 'Title'),
-                  ),
-                  const SizedBox(
-                    height: 10,
-                  ),
-                  TextField(
-                    controller: _descriptionController,
-                    decoration: const InputDecoration(hintText: 'Description'),
-                  ),
-                  const SizedBox(
-                    height: 20,
-                  ),
-                  ElevatedButton(
-                    onPressed: () async {
-                      // Save new journal
-                      if (id == null) {
-                        await _addItem();
-                      }
-
-                      if (id != null) {
-                        await _updateItem(id);
-                      }
-
-                      // Clear the text fields
-                      _titleController.text = '';
-                      _descriptionController.text = '';
-
-                      // Close the bottom sheet
-                      Navigator.of(context).pop();
-                    },
-                    child: Text(id == null ? 'Create New' : 'Update'),
-                  )
-                ],
-              ),
-            ));
-  }
-
-// Insert a new journal to the database
-  Future<void> _addItem() async {
-    await SQLHelper.createItem(
-        _titleController.text, _descriptionController.text);
-    _refreshJournals();
-  }
-
-  // Update an existing journal
-  Future<void> _updateItem(int id) async {
-    await SQLHelper.updateItem(
-        id, _titleController.text, _descriptionController.text);
-    _refreshJournals();
-  }
-
-  // Delete an item
-  void _deleteItem(int id) async {
-    await SQLHelper.deleteItem(id);
-    ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-      content: Text('Successfully deleted a journal!'),
-    ));
-    _refreshJournals();
-  }
-
+class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Kindacode.com'),
+        title: const Text('Homee!'),
       ),
-      body: _isLoading
-          ? const Center(
-              child: CircularProgressIndicator(),
-            )
-          : ListView.builder(
-              itemCount: _journals.length,
-              itemBuilder: (context, index) => Card(
-                color: Colors.orange[200],
-                margin: const EdgeInsets.all(15),
-                child: ListTile(
-                    title: Text(_journals[index]['title']),
-                    subtitle: Text(_journals[index]['description']),
-                    trailing: SizedBox(
-                      width: 100,
-                      child: Row(
-                        children: [
-                          IconButton(
-                            icon: const Icon(Icons.edit),
-                            onPressed: () => _showForm(_journals[index]['id']),
-                          ),
-                          IconButton(
-                            icon: const Icon(Icons.delete),
-                            onPressed: () =>
-                                _deleteItem(_journals[index]['id']),
-                          ),
-                        ],
-                      ),
-                    )),
+      body: getConteudo(),
+    );
+  }
+
+  /// Get conteudo tela
+  Widget getConteudo(){
+    return ListView.builder(
+      itemCount: Cabecalho().experimentos.length,
+      itemBuilder: (context, index) => card(index)
+    );
+  }
+
+  Widget card(int index){
+    return Padding(
+      padding: const EdgeInsets.all(10),
+      child: GestureDetector(
+        child: Container(
+          height: 50,
+          decoration: BoxDecoration(
+            color: Colors.blueGrey,
+            borderRadius: BorderRadius.circular(20),
+          ),
+          child: Center(
+            child: Text(
+              Cabecalho().experimentos[index]['nome'],
+              style: const TextStyle(
+                fontSize: 25,
+                fontStyle: FontStyle.italic,
+                fontWeight: FontWeight.bold,
+                color: Colors.white
               ),
-            ),
-      floatingActionButton: FloatingActionButton(
-        child: const Icon(Icons.add),
-        onPressed: () => _showForm(null),
+            )
+          ),
+        ),
+        onTap: () => navegaExperimentos(index),
       ),
     );
+  }
+
+  void navegaExperimentos(int index){
+    switch (Cabecalho().experimentos[index]['id']) {
+      case '1':
+        Navigator.push(context, MaterialPageRoute(builder:(context) => const ReadJsonPage()));
+        break;
+      case '2':
+        Navigator.push(context, MaterialPageRoute(builder:(context) => const CRUDSQLitePage()));
+        break;
+      case '3':
+        Navigator.push(context, MaterialPageRoute(builder:(context) => const CheckBoxListPage()));
+        break;
+      default:
+    }
   }
 }
