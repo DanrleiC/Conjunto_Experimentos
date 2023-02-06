@@ -13,5 +13,9 @@ class Cabecalho{
       'id'  : '3', 
       'nome': 'CheckBox List'
     },
+    {
+      'id'  : '4', 
+      'nome': 'Dart BarCode Bitch'
+    },
   ];
 }

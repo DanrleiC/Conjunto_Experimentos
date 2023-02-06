@@ -48,6 +48,8 @@ dev_dependencies:
   # rules and activating additional ones.
   flutter_lints: ^2.0.0
   sqflite: ^2.2.4+1
+  dart_barcode: ^2.0.0
+  webcontent_converter: ^0.0.8+3
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_read_json/pages/barcode.dart';
 import 'package:flutter_read_json/pages/checkbox_list.dart';
 import 'package:flutter_read_json/pages/crud_sqlite.dart';
 import 'package:flutter_read_json/pages/read_json.dart';
@@ -90,6 +91,9 @@ class _MyHomePageState extends State<MyHomePage> {
         break;
       case '3':
         Navigator.push(context, MaterialPageRoute(builder:(context) => const CheckBoxListPage()));
+        break;
+      case '4':
+        Navigator.push(context, MaterialPageRoute(builder:(context) => const BarcodePage()));
         break;
       default:
     }
