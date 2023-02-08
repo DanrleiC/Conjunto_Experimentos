@@ -17,5 +17,9 @@ class Cabecalho{
       'id'  : '4', 
       'nome': 'Dart BarCode Bitch'
     },
+    {
+      'id'  : '5', 
+      'nome': 'Bluetooth Permission Testezinho'
+    },
   ];
 }
