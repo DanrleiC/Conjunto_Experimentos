@@ -1,9 +1,12 @@
-import 'dart:convert';
+import 'dart:io';
+
+import 'package:barcode/barcode.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 //import 'package:flutter_html/flutter_html.dart';
 import 'package:flutter_read_json/utils/htlm_string.dart';
 import 'package:webcontent_converter/webcontent_converter.dart';
+
 
 class BarcodePage extends StatefulWidget {
   const BarcodePage({super.key});
@@ -29,7 +32,12 @@ class _BarcodePageState extends State<BarcodePage> {
       ),
       body: conteudo(),
       floatingActionButton: FloatingActionButton(
-        onPressed: () => toBase64(),
+        onPressed: () {
+          barcode(            
+            Barcode.itf14(),
+            '1540014128876',
+          );
+        },
       ),
     );
   }
@@ -57,5 +65,26 @@ class _BarcodePageState extends State<BarcodePage> {
   dynamic teste(){
     toBase64().then((value) => boa = value);
     return boa;
+  }
+
+  void barcode(
+    Barcode bc,
+    String data, {
+    String? filename,
+    double? width,
+    double? height,
+    double? fontHeight,
+  }){
+    /// Create the Barcode
+  final svg = bc.toSvg(
+    data,
+    width: width ?? 200,
+    height: height ?? 80,
+    fontHeight: fontHeight,
+  );
+
+  // Save the image
+  filename ??= bc.name.replaceAll(RegExp(r'\s'), '-').toLowerCase();
+  File('lib/assets/$filename.svg').writeAsStringSync(svg);
   }
 }
