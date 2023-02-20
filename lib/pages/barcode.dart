@@ -6,6 +6,15 @@ import 'package:flutter/material.dart';
 //import 'package:flutter_html/flutter_html.dart';
 import 'package:flutter_read_json/utils/htlm_string.dart';
 import 'package:webcontent_converter/webcontent_converter.dart';
+import 'package:syncfusion_flutter_barcodes/barcodes.dart';
+import 'package:widgets_to_image/widgets_to_image.dart';
+
+// WidgetsToImageController to access widget
+WidgetsToImageController controller = WidgetsToImageController();
+// to save image bytes of widget
+Uint8List? bytes;
+
+bool? testeImgTopdasBalada = true;
 
 
 class BarcodePage extends StatefulWidget {
@@ -19,8 +28,8 @@ class _BarcodePageState extends State<BarcodePage> {
 
   @override
   void initState() {
-    toBase64();
-    teste();
+    //toBase64();
+    //teste();
     super.initState();
   }
 
@@ -33,10 +42,8 @@ class _BarcodePageState extends State<BarcodePage> {
       body: conteudo(),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          barcode(            
-            Barcode.itf14(),
-            '1540014128876',
-          );
+          testeImgTopdasBalada = false;
+          //testezinhoMaroto();
         },
       ),
     );
@@ -46,14 +53,34 @@ class _BarcodePageState extends State<BarcodePage> {
     return SingleChildScrollView(
       child: Column(
         children: [
-          Image.memory(
-            Uint8List.fromList(teste()),
-            fit: BoxFit.contain,            
-          )
+          //testeImgTopdasBalada == true? montaiMgBarcode() : Container(),
+          // Image.memory(
+          //   Uint8List.fromList(teste()),
+          //   fit: BoxFit.contain,            
+          // ),
+          WidgetsToImage(
+            controller: controller,
+            child: SfBarcodeGenerator(
+              value: '1540014128876',
+              showValue: true,
+            ),
+          ),
         ],
       ),
     );
   }
+
+  // dynamic montaiMgBarcode(){
+  //   return           Image.memory(
+  //           Uint8List.fromList(testeImageBarcodeWidget()),
+  //           fit: BoxFit.contain,            
+  //         );
+  // }
+
+  // dynamic testezinhoMaroto() async {
+  //   dynamic bytes = await controller.capture();
+  //   return bytes;
+  // }
 
   dynamic toBase64() async{
     final content = HtmlString().html;
@@ -66,6 +93,12 @@ class _BarcodePageState extends State<BarcodePage> {
     toBase64().then((value) => boa = value);
     return boa;
   }
+
+  // dynamic boaBarcode;
+  // dynamic testeImageBarcodeWidget(){
+  //   testezinhoMaroto().then((value) => boaBarcode = value);
+  //   return boaBarcode;
+  // }
 
   void barcode(
     Barcode bc,

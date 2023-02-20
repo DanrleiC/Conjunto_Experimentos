@@ -3,7 +3,9 @@ import 'package:flutter_read_json/pages/barcode.dart';
 import 'package:flutter_read_json/pages/bluetooth_permission.dart';
 import 'package:flutter_read_json/pages/checkbox_list.dart';
 import 'package:flutter_read_json/pages/crud_sqlite.dart';
+import 'package:flutter_read_json/pages/file_picker.dart';
 import 'package:flutter_read_json/pages/read_json.dart';
+import 'package:flutter_read_json/pages/teste_maroto.dart';
 import 'package:flutter_read_json/utils/cabecalho.dart';
 
 void main() => runApp(const MyApp());
@@ -98,6 +100,12 @@ class _MyHomePageState extends State<MyHomePage> {
         break;
       case '5':
         Navigator.push(context, MaterialPageRoute(builder:(context) => const BluetoothPermissionPage()));
+        break;
+      case '6':
+        Navigator.push(context, MaterialPageRoute(builder:(context) => const Gasparnoix()));
+        break;
+      case '7':
+        Navigator.push(context, MaterialPageRoute(builder:(context) => FilePickerDemo()));
         break;
       default:
     }
